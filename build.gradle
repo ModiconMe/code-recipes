@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+subprojects {
+    group 'ru.modiconme.recepies'
+    version '1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
