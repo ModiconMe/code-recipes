@@ -1,4 +1,4 @@
 rootProject.name = 'code-recepies'
-include 'java-recepies'
-include 'spring-recepies'
+include 'java-recipes'
+include 'spring-recipes'
 
