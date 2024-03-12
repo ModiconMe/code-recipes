@@ -11,7 +11,14 @@ import java.util.stream.Collectors;
 
 import static java.text.Normalizer.normalize;
 
-public class MessageDigestEx {
+/**
+ * Нужен для того, чтобы быть уверенным, что данные в зашифрованном сообщении не подменились.
+ * При изменении данных сообщения его хэш тоже измениться.
+ * <p>
+ * Для увеличения надежности желательно использовать SALT, чтобы злоумышленник не смог перегенерировать
+ * хэш сообщения при изменении сообщения, поскольку, чтобы хэши совпали, нужно знать SALT.
+ */
+public class MessageDigests {
 
     /*
         соль нужна для того, чтобы злоумышленник
@@ -44,10 +51,8 @@ public class MessageDigestEx {
                 .map(String::trim)
                 .map(s -> normalize(s, Normalizer.Form.NFC))
                 .collect(Collectors.joining("|"));
-
         byte[] srcBytes = srcString.getBytes(StandardCharsets.UTF_8);
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        MessageDigest md = getSha256MessageDigestInstance();
         byte[] result = md.digest(srcBytes);
         return Base64.getEncoder().encodeToString(result);
     }
@@ -57,10 +62,14 @@ public class MessageDigestEx {
     }
 
     public static boolean verify(String originalString, String encryptedString) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        MessageDigest md = getSha256MessageDigestInstance();
         md.update(originalString.getBytes());
         byte[] digest = md.digest();
         String hashedString = new String(digest);
         return hashedString.equals(encryptedString);
+    }
+
+    private static MessageDigest getSha256MessageDigestInstance() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256");
     }
 }

@@ -1,0 +1,16 @@
+server:
+#  port: 443
+  ssl:
+    enabled: true
+    protocol: TLS
+    enabled-protocols: TLSv1.2
+
+    key-store-type: PKCS12
+    key-store: classpath:certs/domain.p12
+    key-store-password: 1234
+    key-alias: domain
+
+#    client-auth: need
+#    trust-store-type: JKS
+#    trust-store: classpath:certs/rootCA.jks
+#    trust-store-password: 123456
