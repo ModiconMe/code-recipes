@@ -32,14 +32,14 @@ public class Ssls {
     public static X509TrustManager getDefaultTrustManagerFactory() {
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init((KeyStore) null);
-        List<X509Certificate> certificates = asList(tmf.getTrustManagers())
-                .stream()
-                .filter(X509TrustManager.class::isInstance)
-                .map(X509TrustManager.class::cast)
-                .map(trustManager -> asList(trustManager.getAcceptedIssuers()))
-                .flatMap(Collection::stream)
-                .toList();
-        System.out.println(certificates);
+//        List<X509Certificate> certificates = asList(tmf.getTrustManagers())
+//                .stream()
+//                .filter(X509TrustManager.class::isInstance)
+//                .map(X509TrustManager.class::cast)
+//                .map(trustManager -> asList(trustManager.getAcceptedIssuers()))
+//                .flatMap(Collection::stream)
+//                .toList();
+//        System.out.println(certificates);
         return (X509TrustManager) tmf.getTrustManagers()[0];
     }
 

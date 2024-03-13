@@ -13,6 +13,8 @@ import static ru.modiconme.recepies.crypto.Keys.KeyStoreUtils.loadPKCS12KeyStore
 
 public class Signatures {
 
+    public static final String SHA_256_WITH_RSA = "SHA256WithRSA";
+
     public static void main(String[] args) throws NoSuchAlgorithmException {
         Security.addProvider(new BouncyCastleProvider());
         String data = "Hello";
@@ -23,7 +25,7 @@ public class Signatures {
 
     @SneakyThrows
     private static String sign(String data) {
-        Signature signature = Signature.getInstance("SHA256WithRSA");
+        Signature signature = Signature.getInstance(SHA_256_WITH_RSA);
         PrivateKey privateKey = getKeyEntry().getPrivateKey();
         signature.initSign(privateKey, new SecureRandom());
         signature.update(data.getBytes());
@@ -33,7 +35,7 @@ public class Signatures {
 
     @SneakyThrows
     private static boolean verify(String rowData, String base64EncData) {
-        Signature signature = Signature.getInstance("SHA256WithRSA");
+        Signature signature = Signature.getInstance(SHA_256_WITH_RSA);
         byte[] encData = Base64.getDecoder().decode(base64EncData);
         PublicKey publicKey = getKeyEntry().getCertificate().getPublicKey();
         signature.initVerify(publicKey);

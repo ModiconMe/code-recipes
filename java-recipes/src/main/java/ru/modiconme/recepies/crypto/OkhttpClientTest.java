@@ -54,15 +54,6 @@ public class OkhttpClientTest {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(logging);
 
-        builder.authenticator(new Authenticator() {
-            @Nullable
-            @Override
-            public Request authenticate(@Nullable Route route, @NotNull Response response) throws IOException {
-                String cred = Credentials.basic("name", "pass");
-                return response.request().newBuilder().header("Authorization", cred).build();
-            }
-        })
-
         builder.connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
                 .hostnameVerifier(Ssls.getUnsafeHostnameVerifier())
                 .sslSocketFactory(socketFactory, x509TrustManager)
