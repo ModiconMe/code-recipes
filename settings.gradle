@@ -5,4 +5,6 @@ include 'spring-recipes:spring-https-server'
 findProject(':spring-recipes:spring-https-server')?.name = 'spring-https-server'
 include 'spring-recipes:okhttp-https-client'
 findProject(':spring-recipes:okhttp-https-client')?.name = 'okhttp-https-client'
+include 'java-recipes:crypto-utils'
+findProject(':java-recipes:crypto-utils')?.name = 'crypto-utils'
 
