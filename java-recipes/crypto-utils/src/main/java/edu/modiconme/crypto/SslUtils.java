@@ -1,25 +1,19 @@
-package ru.modiconme.recepies.crypto;
+package edu.modiconme.crypto;
 
-import com.google.common.io.Resources;
 import lombok.SneakyThrows;
 
-import javax.net.ssl.*;
-import java.io.InputStream;
-import java.net.Socket;
-import java.nio.file.Files;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import java.nio.file.Path;
-import java.security.Key;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
-import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
-import static java.util.Arrays.asList;
+import static edu.modiconme.crypto.KeyPairsUtils.loadPKCS12KeyStore;
 
-public class Ssls {
+public class SslUtils {
 
     public static void main(String[] args) {
 //        test();
@@ -69,14 +63,14 @@ public class Ssls {
     }
 
     public static X509TrustManager getUserTrustStore(Path trustStorePath, String trustStorePassword) throws Exception {
-        KeyStore keyStore = Keys.KeyStoreUtils.loadPKCS12KeyStore(trustStorePath, trustStorePassword);
+        KeyStore keyStore = loadPKCS12KeyStore(trustStorePath, trustStorePassword);
         final TrustManagerFactory tmFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmFactory.init(keyStore);
         return (X509TrustManager) tmFactory.getTrustManagers()[0];
     }
 
     public static KeyManagerFactory getKeyManagerFactory(Path keyStorePath, String keyStorePassword) throws Exception {
-        KeyStore keyStore = Keys.KeyStoreUtils.loadPKCS12KeyStore(keyStorePath, keyStorePassword);
+        KeyStore keyStore = loadPKCS12KeyStore(keyStorePath, keyStorePassword);
         final KeyManagerFactory kmFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmFactory.init(keyStore, keyStorePassword.toCharArray());
         return kmFactory;

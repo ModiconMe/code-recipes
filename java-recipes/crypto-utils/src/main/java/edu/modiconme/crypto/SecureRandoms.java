@@ -1,4 +1,4 @@
-package ru.modiconme.recepies.crypto;
+package edu.modiconme.crypto;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

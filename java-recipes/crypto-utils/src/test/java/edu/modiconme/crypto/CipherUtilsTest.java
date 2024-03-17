@@ -3,26 +3,27 @@ package edu.modiconme.crypto;
 import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
 import java.nio.file.Path;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.interfaces.RSAPublicKey;
 
 import static edu.modiconme.crypto.CipherAlgorithms.*;
 import static edu.modiconme.crypto.CipherUtils.*;
-import static edu.modiconme.crypto.KeysUtils.*;
+import static edu.modiconme.crypto.KeyPairsUtils.loadRSAPrivateKeyJava;
+import static edu.modiconme.crypto.KeyPairsUtils.loadX509PublicKeyJava;
 import static edu.modiconme.crypto.TestFixture.uniqString;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CipherUtilsTest {
 
     @Test
     void testEncryptAndDecryptFlow() throws Exception {
         String srcString = uniqString();
-        SecretKeySpec secretKey = genSecretKey();
+        SecretKey secretKey = SecretKeysUtils.genSecretKey(SecretKeysUtils.KeyGeneratorAlgorithm.AES);
         byte[] encrypt = CipherUtils.encryptAesGcmNoPadding(secretKey, srcString.getBytes(UTF_8));
         byte[] decrypt = decryptAesGcmNoPadding(secretKey, encrypt);
         assertEquals(srcString, new String(decrypt));
@@ -35,7 +36,7 @@ class CipherUtilsTest {
      */
     @Test
     void testHybridCipher() throws Exception {
-        SecretKeySpec secretKey = genSecretKey();
+        SecretKey secretKey = SecretKeysUtils.genSecretKey(SecretKeysUtils.KeyGeneratorAlgorithm.AES);
 
         // Шифруем данные с помощью синхронного ключа
         String srcString = uniqString();
@@ -44,13 +45,13 @@ class CipherUtilsTest {
 
         // Шифруем секретный ключ публичным ключом
         var pubKeyPath = Path.of(Resources.getResource("certs/public.key").getPath());
-        RSAPublicKey pubKey = readX509PublicKeyJava(pubKeyPath);
+        PublicKey pubKey = loadX509PublicKeyJava(pubKeyPath);
         byte[] encryptAESKey = encryptWithPublicKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, pubKey, secretKey.getEncoded());
 
         // Расшифровываем секретный ключ приватным ключом
         var noEncPrivateKeyPath = Path.of(Resources.getResource("certs/private_noenc.key").getPath());
-        PrivateKey privateKey = readPEMPrivateKeyJava(noEncPrivateKeyPath);
-        byte[] decryptAESKey = decryptWithPublicKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, privateKey, encryptAESKey);
+        PrivateKey privateKey = loadRSAPrivateKeyJava(noEncPrivateKeyPath);
+        byte[] decryptAESKey = decryptWithPrivateKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, privateKey, encryptAESKey);
         SecretKeySpec decryptedSecretKey = new SecretKeySpec(decryptAESKey, "AES");
 
         // Расшифровываем данные с помощью синхронного ключа
@@ -61,7 +62,7 @@ class CipherUtilsTest {
 
     @Test
     void testHybridCipher1() throws Exception {
-        SecretKeySpec secretKey = genSecretKey();
+        SecretKey secretKey = SecretKeysUtils.genSecretKey(SecretKeysUtils.KeyGeneratorAlgorithm.AES);
 
         // Шифруем данные с помощью синхронного ключа
         String srcString = uniqString();
@@ -73,13 +74,13 @@ class CipherUtilsTest {
 
         // Шифруем секретный ключ публичным ключом
         var pubKeyPath = Path.of(Resources.getResource("certs/public.key").getPath());
-        RSAPublicKey pubKey = readX509PublicKeyJava(pubKeyPath);
+        PublicKey pubKey = loadX509PublicKeyJava(pubKeyPath);
         byte[] encryptAESKey = encryptWithPublicKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, pubKey, secretKey.getEncoded());
 
         // Расшифровываем секретный ключ приватным ключом
         var noEncPrivateKeyPath = Path.of(Resources.getResource("certs/private_noenc.key").getPath());
-        PrivateKey privateKey = readPEMPrivateKeyJava(noEncPrivateKeyPath);
-        byte[] decryptAESKey = decryptWithPublicKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, privateKey, encryptAESKey);
+        PrivateKey privateKey = loadRSAPrivateKeyJava(noEncPrivateKeyPath);
+        byte[] decryptAESKey = decryptWithPrivateKey(RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING, privateKey, encryptAESKey);
         SecretKeySpec decryptedSecretKey = new SecretKeySpec(decryptAESKey, "AES");
 
         // Расшифровываем данные с помощью синхронного ключа
