@@ -61,11 +61,11 @@ class KeyPairsUtilsTest {
     @Test
     void shouldLoadKeyStoreSuccess() throws Exception {
         Path keyStorePath = Path.of(Resources.getResource("certs/server.p12").getPath());
-        String password = "1234";
+        char[] password = "1234".toCharArray();
         String certificateAlias = "my certificate";
         KeyStore keyStore = loadPKCS12KeyStore(keyStorePath, password);
         Certificate certificate = keyStore.getCertificate(certificateAlias);
-        PrivateKey privateKey = (PrivateKey) keyStore.getKey(certificateAlias, password.toCharArray());
+        PrivateKey privateKey = (PrivateKey) keyStore.getKey(certificateAlias, password);
         assertEquals("pkcs12", keyStore.getType());
         assertEquals("X.509", certificate.getType());
         assertEquals(RSA.getAlgorithm(), privateKey.getAlgorithm());

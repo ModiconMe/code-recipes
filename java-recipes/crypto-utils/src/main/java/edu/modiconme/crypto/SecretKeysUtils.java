@@ -8,7 +8,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 
 @UtilityClass
@@ -24,7 +23,7 @@ public class SecretKeysUtils {
     }
 
     /**
-     * https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keygenerator-algorithms
+     * <a href="https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keygenerator-algorithms">...</a>
      */
     @Getter
     @RequiredArgsConstructor
@@ -39,23 +38,21 @@ public class SecretKeysUtils {
     /**
      * Продвинутая генерация ключа, настраивается соль и пароль
      */
-    public static SecretKeySpec genDefaultSecretKey() throws Exception {
-        return genSecretKey("1234", "salt", 256, SecretKeyAlgorithm.PBKDF2_WITH_HMAC_SHA_256);
+    public static SecretKey genDefaultSecretKey() throws Exception {
+        return genSecretKey("1234".toCharArray(), "salt".getBytes(), 256, SecretKeyAlgorithm.PBKDF2_WITH_HMAC_SHA_256);
     }
 
-    public static SecretKeySpec genSecretKey(
-            String password,
-            String salt,
+    public static SecretKey genSecretKey(
+            char[] password,
+            byte[] salt,
             int keySize,
             SecretKeyAlgorithm algorithm) throws Exception {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm.algorithm);
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 10_000, keySize);
-        SecretKey temp = factory.generateSecret(spec);
-        return new SecretKeySpec(temp.getEncoded(), algorithm.algorithm);
+        return SecretKeyFactory.getInstance(algorithm.algorithm).
+                generateSecret(new PBEKeySpec(password, salt, 10_000, keySize));
     }
 
     /**
-     * https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keygenerator-algorithms
+     * <a href="https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keygenerator-algorithms">...</a>
      */
     @Getter
     @RequiredArgsConstructor

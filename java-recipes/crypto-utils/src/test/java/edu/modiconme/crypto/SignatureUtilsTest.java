@@ -51,7 +51,7 @@ class SignatureUtilsTest {
     }
 
     private static KeyStore.PrivateKeyEntry getKeyEntry() throws Exception {
-        KeyStore keyStore = loadPKCS12KeyStore(Path.of(Resources.getResource("certs/server.p12").getPath()), "1234");
-        return loadKeyAndCert(keyStore, "1234", "my certificate");
+        KeyStore keyStore = loadPKCS12KeyStore(Path.of(Resources.getResource("certs/server.p12").getPath()), "1234".toCharArray());
+        return loadKeyAndCert(keyStore, "1234".toCharArray(), "my certificate");
     }
 }

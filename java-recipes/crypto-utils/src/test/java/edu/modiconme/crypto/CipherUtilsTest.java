@@ -10,7 +10,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 
-import static edu.modiconme.crypto.CipherAlgorithms.*;
+import static edu.modiconme.crypto.CipherAlgorithms.RSA_ECB_OAEP_WITH_SHA_256_AND_MGF_1_PADDING;
 import static edu.modiconme.crypto.CipherUtils.*;
 import static edu.modiconme.crypto.KeyPairsUtils.loadRSAPrivateKeyJava;
 import static edu.modiconme.crypto.KeyPairsUtils.loadX509PublicKeyJava;
@@ -40,7 +40,6 @@ class CipherUtilsTest {
 
         // Шифруем данные с помощью синхронного ключа
         String srcString = uniqString();
-        CipherAlgorithms algorithm = AES_GCM_NO_PADDING;
         byte[] encrypt = CipherUtils.encryptAesGcmNoPadding(secretKey, srcString.getBytes(UTF_8));
 
         // Шифруем секретный ключ публичным ключом
@@ -66,7 +65,6 @@ class CipherUtilsTest {
 
         // Шифруем данные с помощью синхронного ключа
         String srcString = uniqString();
-        CipherAlgorithms algorithm = AES_CBC_PKCS5PADDING;
         byte[] vector = new byte[16];
         new SecureRandom().nextBytes(vector);
 

@@ -117,16 +117,16 @@ public class KeyPairsUtils {
      * Certificate certificate = keyEntry.getCertificate();
      * PublicKey publicKey = certificate.getPublicKey();
      */
-    public static KeyStore.PrivateKeyEntry loadKeyAndCert(KeyStore keyStore, String keyPassword,
+    public static KeyStore.PrivateKeyEntry loadKeyAndCert(KeyStore keyStore, char[] keyPassword,
                                                           String certificateAlias) throws Exception {
-        var entryPassword = new KeyStore.PasswordProtection(keyPassword.toCharArray());
+        var entryPassword = new KeyStore.PasswordProtection(keyPassword);
         return ((KeyStore.PrivateKeyEntry) keyStore.getEntry(certificateAlias, entryPassword));
     }
 
-    public static KeyStore loadPKCS12KeyStore(Path path, String keystorePassword) throws Exception {
+    public static KeyStore loadPKCS12KeyStore(Path path, char[] keystorePassword) throws Exception {
         try (var is = Files.newInputStream(path)) {
             KeyStore keyStore = KeyStore.getInstance(KeyStoreType.PKCS12.type);
-            keyStore.load(is, keystorePassword.toCharArray());
+            keyStore.load(is, keystorePassword);
             return keyStore;
         }
     }
@@ -138,7 +138,7 @@ public class KeyPairsUtils {
     }
 
     /**
-     * https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keystore-types
+     * <a href="https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keystore-types">...</a>
      */
     @Getter
     @RequiredArgsConstructor
@@ -151,7 +151,7 @@ public class KeyPairsUtils {
     }
 
     /**
-     * https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keyfactory-algorithms
+     * <a href="https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keyfactory-algorithms">...</a>
      */
     @Getter
     @RequiredArgsConstructor
@@ -164,7 +164,7 @@ public class KeyPairsUtils {
     }
 
     /**
-     * https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keypairgenerator-algorithms
+     * <a href="https://docs.oracle.com/en/java/javase/20/docs/specs/security/standard-names.html#keypairgenerator-algorithms">...</a>
      */
     @Getter
     @RequiredArgsConstructor

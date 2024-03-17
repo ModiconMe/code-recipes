@@ -10,7 +10,7 @@ server:
     key-store-password: 1234
     key-alias: domain
 
-#    client-auth: need
-#    trust-store-type: JKS
-#    trust-store: classpath:certs/rootCA.jks
-#    trust-store-password: 123456
+    client-auth: need
+    trust-store-type: JKS
+    trust-store: classpath:certs/rootCA.jks
+    trust-store-password: 123456
